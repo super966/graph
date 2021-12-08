@@ -1,6 +1,7 @@
-import Vector.Vector2d;
+import MathComponent.Vector2d;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -12,15 +13,19 @@ public class Main {
 
         JFrame frame = new JFrame("Points");
 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container bg = frame.getContentPane();
+        bg.setBackground(Color.black);
 
-            frame.add(triangle);
 
-            frame.setSize(500, 500);
+        bg.add(triangle);
+        bg.validate();
 
-            frame.setLocationRelativeTo(null);
+        frame.setSize(500, 500);
 
-            frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
 
     }
 }

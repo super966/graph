@@ -1,4 +1,4 @@
-package Vector;
+package MathComponent;
 
 public class Vector4d {
     private double x;
@@ -75,7 +75,41 @@ public class Vector4d {
         return new Vector4d(x / f, y / f, z / f, w / f);
     }
 
-//    public Vector4d matrixMul(Matrix m){
-//        return new Vector4d();
-//    }
+    public void divW(){
+        if(w == 0) return ;
+        x = x / w;
+        y = y / w;
+        z = z / w;
+        w = 1;
+    }
+
+    //矩阵右乘
+    public Vector4d matrixMul(Matrix m){
+        return new Vector4d(x*m.get(0) + y * m.get(4) + z * m.get(8) + w * m.get(12),
+                            x*m.get(1) + y * m.get(5) + z * m.get(9) + w * m.get(13),
+                            x*m.get(2) + y * m.get(6) + z * m.get(10) + w * m.get(14),
+                            x*m.get(3) + y * m.get(7) + z * m.get(11) + w * m.get(15));
+    }
+
+    public void degToRadian(){
+        x *= pi180;
+        y *= pi180;
+        z *= pi180;
+        w *= pi180;
+    }
+
+    public double Length(){
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+    public Vector4d Normalize(){
+        double length = Length();
+        return new Vector4d(
+            x /= length,
+            y /= length,
+            z /= length, w
+        );
+    }
+
+    final double pi180 = 3.1415926 / 180;
 }

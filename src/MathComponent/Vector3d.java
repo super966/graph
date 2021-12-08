@@ -1,4 +1,4 @@
-package Vector;
+package MathComponent;
 
 public class Vector3d {
     private double x;
