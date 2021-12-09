@@ -15,6 +15,79 @@ public class Camera {
     private double aspect;
     private double zNear;
     private double zFar;
+
+    public Vector4d getPos() {
+        return pos;
+    }
+
+    public void setPos(Vector4d pos) {
+        this.pos = pos;
+    }
+
+    public Vector4d getUp() {
+        return up;
+    }
+
+    public void setUp(Vector4d up) {
+        this.up = up;
+    }
+
+    public Vector4d getRight() {
+        return right;
+    }
+
+    public void setRight(Vector4d right) {
+        this.right = right;
+    }
+
+    public double getFovY() {
+        return fovY;
+    }
+
+    public void setFovY(double fovY) {
+        this.fovY = fovY;
+    }
+
+    public double getAspect() {
+        return aspect;
+    }
+
+    public void setAspect(double aspect) {
+        this.aspect = aspect;
+    }
+
+    public double getzNear() {
+        return zNear;
+    }
+
+    public void setzNear(double zNear) {
+        this.zNear = zNear;
+    }
+
+    public double getzFar() {
+        return zFar;
+    }
+
+    public void setzFar(double zFar) {
+        this.zFar = zFar;
+    }
+
+    public Matrix getViewTransform() {
+        return viewTransform;
+    }
+
+    public void setViewTransform(Matrix viewTransform) {
+        this.viewTransform = viewTransform;
+    }
+
+    public Matrix getProjTransform() {
+        return projTransform;
+    }
+
+    public void setProjTransform(Matrix projTransform) {
+        this.projTransform = projTransform;
+    }
+
     private Matrix viewTransform;
     private Matrix projTransform;
 

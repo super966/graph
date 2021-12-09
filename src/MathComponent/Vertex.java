@@ -1,18 +1,62 @@
 package MathComponent;
 
-import Component.*;
+import Component.Material;
+import Component.TextureCoord;
+
+import java.awt.*;
 
 /**
  * @author LSY
  * @date 2021/12/08 15:34
  **/
 public class Vertex {
-    Vector4d pos;
-    Vector4d normal;
-    Material material;
-    TextureCoord texture;
-    Color color;
-    double z_deep;
+    private Vector4d pos;
+    private Vector4d normal;
+    private Material material;
+    private TextureCoord texture;
+    private Color color;
+
+    public Vector4d getPos() {
+        return pos;
+    }
+
+    public void setPos(Vector4d pos) {
+        this.pos = pos;
+    }
+
+    public Vector4d getNormal() {
+        return normal;
+    }
+
+    public void setNormal(Vector4d normal) {
+        this.normal = normal;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public TextureCoord getTexture() {
+        return texture;
+    }
+
+    public void setTexture(TextureCoord texture) {
+        this.texture = texture;
+    }
+
+    public double getZ_deep() {
+        return z_deep;
+    }
+
+    public void setZ_deep(double z_deep) {
+        this.z_deep = z_deep;
+    }
+
+    private double z_deep;
 
     public Vertex() {
         pos = new Vector4d(0.0,0.0,0.0,1);

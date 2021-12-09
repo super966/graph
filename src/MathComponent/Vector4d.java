@@ -6,6 +6,14 @@ public class Vector4d {
     private double z;
     private double w;
 
+    public Vector4d(Vector4d v){
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        this.w = v.w;
+    }
+
+
     public Vector4d(double x, double y, double z, double w) {
         this.x = x;
         this.y = y;
@@ -51,6 +59,13 @@ public class Vector4d {
 
     public Vector4d minus(Vector4d v){
         return new Vector4d(v.x - x, v.y - y, v.z - z,v.w - w);
+    }
+
+    public Vector4d  revserse(){
+        x = -x;
+        y = -y;
+        z = -z;
+        return this;
     }
 
 
