@@ -1,6 +1,7 @@
 package Component;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,15 @@ public class Scene {
     private AmbtLight ambtLight;
     private PointLight pointLight;
     private JFrame background;
+    private BufferedImage texture;
+
+    public BufferedImage getTexture() {
+        return texture;
+    }
+
+    public void setTexture(BufferedImage texture) {
+        this.texture = texture;
+    }
 
     public JFrame getBackground() {
         return background;
@@ -77,7 +87,7 @@ public class Scene {
 
     public void draw(){
         for (int i = 0; i < this.obj.size(); i++) {
-            this.obj.get(i).draw();
+            background.getContentPane().add(obj.get(i));
         }
     }
 }

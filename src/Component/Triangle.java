@@ -1,7 +1,6 @@
 package Component;
 
 import MathComponent.Matrix;
-import MathComponent.Vector2d;
 import MathComponent.Vector4d;
 import MathComponent.Vertex;
 
@@ -20,44 +19,6 @@ public class Triangle extends JPanel {
 
 
 
-    public void dda(Vector2d v1, Vector2d v2, Graphics2D g, Color c1, Color c2){
-
-        double increx, increy, x, y, length;
-        length = Math.max(Math.abs(v2.getX()-v1.getX()),Math.abs(v2.getY()-v1.getY()));
-        increx = ((v2.getX()- v1.getX())/length);
-        increy = ((v2.getY() - v1.getY())/length);
-        x = v1.getX();
-        y = v1.getY();
-        double dis = Math.sqrt(Math.pow(v2.getX() - v1.getX(),2) + Math.pow(v2.getY()-v1.getY(),2));
-        int red, green, blue;
-        for (int i = 0; i < length ;i++){
-
-            double t = Math.sqrt(Math.pow(x - v1.getX(),2) + Math.pow(y-v1.getY(),2))/dis;
-            if(c1.getRed() > c2.getRed()) {
-                red = (int) (c1.getRed() - t * (Math.abs(c1.getRed() - c2.getRed())));
-            }else{
-                red = (int) (c1.getRed() + t * (Math.abs(c1.getRed() - c2.getRed())));
-            }
-
-            if(c1.getBlue() > c2.getBlue()) {
-                blue = (int) (c1.getBlue() - t * (Math.abs(c1.getBlue() - c2.getBlue())));
-            }else{
-                blue = (int) (c1.getBlue() + t * (Math.abs(c1.getBlue() - c2.getBlue())));
-            }
-
-            if(c1.getGreen() > c2.getGreen()) {
-                green = (int) (c1.getGreen() - t * (Math.abs(c1.getGreen() - c2.getGreen())));
-            }else{
-                green = (int) (c1.getGreen() + t * (Math.abs(c1.getGreen() - c2.getGreen())));
-            }
-
-            g.setColor(new Color(red,blue,green));
-
-            g.drawLine((int) ((int) x+0.5), (int) ((int)y+0.5), (int) ((int) x+0.5), (int) ((int)y+0.5));
-            x += increx;
-            y += increy;
-        }
-    }
 
     public Color lightModel(Vertex ver){
         AmbtLight ambtLight = Scene.getInstance().getAmbtLight(); //环境光
@@ -91,26 +52,9 @@ public class Triangle extends JPanel {
 
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
 
-        Vertex one = point[0];
-        Vertex two = point[1];
-        Vertex three = point[2];
 
-        Vector2d oneV2 = new Vector2d(one.getPos().getX(), one.getPos().getY());
-        Vector2d twoV2 = new Vector2d(two.getPos().getX(), two.getPos().getY());
-        Vector2d threeV2 = new Vector2d(three.getPos().getX(), three.getPos().getY());
-
-        dda(oneV2,twoV2,g2d,one.getColor(),two.getColor());
-
-        dda(twoV2,threeV2,g2d,two.getColor(),three.getColor());
-
-        dda(threeV2,oneV2,g2d,three.getColor(),one.getColor());
-    }
-
-    public void draw(Matrix worldMatrix) {
+    public Vertex[] draw(Matrix worldMatrix) {
         JFrame frame = Scene.getInstance().getBackground();
         Scene scene = Scene.getInstance();
         Camera camera = scene.getCamera();
@@ -134,7 +78,6 @@ public class Triangle extends JPanel {
             temp[i].matrixMul(projTransMatrix);
             temp[i].matrixMul(viewpointMatrix);
         }
-        this.point = temp;
-        frame.getContentPane().add(this);
+        return temp;
     }
 }

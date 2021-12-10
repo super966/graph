@@ -3,12 +3,16 @@ import MathComponent.Matrix;
 import MathComponent.Vector4d;
 import MathComponent.Vertex;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Vertex v1 = new Vertex(new Vector4d(1,0,0,1));
         Vertex v2 = new Vertex(new Vector4d(0,1,0,1));
         Vertex v3 = new Vertex(new Vector4d(0,0,0,1));
@@ -31,6 +35,12 @@ public class Main {
         v4.setMaterial(new Material(0.2,0.4,0.6,2));
         v5.setMaterial(new Material(0.2,0.4,0.6,2));
         v6.setMaterial(new Material(0.2,0.4,0.6,2));
+        v1.setTexture(new TextureCoord(0,1));
+        v2.setTexture(new TextureCoord(1,0));
+        v3.setTexture(new TextureCoord(0,0));
+        v4.setTexture(new TextureCoord(0,1));
+        v5.setTexture(new TextureCoord(1,0));
+        v6.setTexture(new TextureCoord(0,0));
 
         v4.setColor(Color.red);
         v5.setColor(Color.blue);
@@ -40,9 +50,9 @@ public class Main {
         points[1] = v2;
         points[2] = v3;
         Obj obj = new Obj();
-        obj.addtri(
-                new Triangle(points)
-        );
+//        obj.addtri(
+//                new Triangle(points)
+//        );
         points[0] = v4;
         points[1] = v5;
         points[2] = v6;
@@ -77,6 +87,9 @@ public class Main {
         scene.setPointLight(pointLight);
         scene.setViewPoint(viewPoint);
         scene.addObj(obj);
+        File img = new File("C:\\Users\\Administrator\\IdeaProjects\\graph\\src\\BlackWhite.bmp");
+        BufferedImage bi = ImageIO.read(img);
+        scene.setTexture(bi);
 
         JFrame frame = new JFrame("Scene");
 

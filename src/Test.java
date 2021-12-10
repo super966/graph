@@ -1,5 +1,9 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author LSY
@@ -50,20 +54,19 @@ public class Test {
     }
 
     public static void main(String[] args){
-        JFrame frame = new JFrame();
-
-        MyDrawPanel panel1 = new MyDrawPanel();
-        MyDrawPanel2 panel2 = new MyDrawPanel2();
-        MyDrawPanel3 panel3 = new MyDrawPanel3();
-        panel2.setOpaque(true);
-        panel3.setOpaque(true);
-        panel1.add(panel2);
-        panel1.add(panel3);
-        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 300);
-        frame.setVisible(true);
-        Scene s = new Scene(frame);
-        s.draw(panel1);
+        File img = new File("C:\\Users\\Administrator\\IdeaProjects\\graph\\src\\robot.bmp");
+        try {
+            BufferedImage bi = ImageIO.read(img);
+            int width = bi.getWidth();
+            int height = bi.getHeight();
+            int rgb = bi.getRGB(100, 100);
+            int blue = rgb&0x000000ff;
+            int green = rgb>>8&0x000000ff;
+            int red = rgb>>16&0x000000ff;
+            System.out.println(red +" " + green + " " + blue);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -1,8 +1,11 @@
 package Component;
 
 import MathComponent.Matrix;
+import MathComponent.Vector2d;
+import MathComponent.Vertex;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +13,373 @@ import java.util.List;
  * @author LSY
  * @date 2021/12/09 13:05
  **/
-public class Obj {
+public class Obj extends JPanel {
 
     private List<Triangle> ltri = new ArrayList<>();
     private Matrix worldmatrix;
     private JPanel jPanel = new JPanel();
 
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        for (int i = 0; i < ltri.size(); i++) {
+            Vertex[] temp = ltri.get(i).draw(worldmatrix);
+            Vertex one = temp[0];
+            Vertex two = temp[1];
+            Vertex three = temp[2];
+
+            int x1 = (int) one.getPos().getX();
+            int y1 = (int) one.getPos().getY();
+            int x2 = (int) two.getPos().getX();
+            int y2 = (int) two.getPos().getY();
+            int x3 = (int) three.getPos().getX();
+            int y3 = (int) three.getPos().getY();
+
+            if((x1 == x2 && x1 == x3 )|| (y1 == y2 && y1 ==y3))
+                return;
+
+            if(y1 > y2){
+                Vertex swap = two;
+                two = one;
+                one = swap;
+            }
+            if(y1 > y3){
+                Vertex swap = three;
+                three = one;
+                one = swap;
+            }
+            if(y2 > y3){
+                Vertex swap = two;
+                two = three;
+                three = swap;
+            }
+            if(Math.abs(y1-y2) < 0.00001f){
+                topTriangle(one, two, three, g2d);
+            }else if(Math.abs(y2-y3) < 0.00001f){
+                downTriangle(one, two, three, g2d);
+            }else{
+                int tempVer_x = (int) (x1 + 0.5 + 1.0 * (y2-y1) * (x3-x1)/(y3-y1));
+                int tempVer_r = (int) (one.getColor().getRed() + 1.0 * (y2-y1) *
+                                        (three.getColor().getRed() - one.getColor().getRed())/(y3-y1));
+                int tempVer_g = (int) (one.getColor().getGreen() + 1.0 * (y2-y1) *
+                                        (three.getColor().getGreen() - one.getColor().getGreen())/(y3-y1));
+                int tempVer_b = (int) (one.getColor().getBlue() + 1.0 * (y2-y1) *
+                                        (three.getColor().getBlue() - one.getColor().getBlue())/(y3-y1));
+
+                tempVer_r  = tempVer_r < 0? 0 : Math.min(tempVer_r, 255);
+                tempVer_b  = tempVer_b < 0? 0 : Math.min(tempVer_b, 255);
+                tempVer_g  = tempVer_g < 0? 0 : Math.min(tempVer_g, 255);
+
+                Color tempVer_c = new Color(tempVer_r,tempVer_g,tempVer_b);
+                Vertex tempVer = new Vertex();
+                tempVer.getPos().setX(tempVer_x);
+                tempVer.setColor(tempVer_c);
+
+                double s= (y2 - y1)/(y3 - y2);
+                double z1 = one.getZ_deep();
+                double z3 = three.getZ_deep();
+                double zt = 0;
+                double k = 0;
+                if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
+                if(zt != 0) zt = 1/zt;
+                if(z1 != z3) k = (zt - z1)/(z3 - z1);
+
+                tempVer.setZ_deep(zt);
+
+//                try{
+                    tempVer.getTexture().setU(one.getTexture().getU()+ k * (three.getTexture().getU() - one.getTexture().getU()));
+                    tempVer.getTexture().setV(one.getTexture().getV()+ k * (three.getTexture().getV() - one.getTexture().getV()));
+//                }catch (Exception e){
+//                    System.out.println(e);
+//                }
+                Vector2d temv = new Vector2d(tempVer.getPos().getX(),tempVer.getPos().getY());
+                Vector2d oneV2 = new Vector2d(one.getPos().getX(), one.getPos().getY());
+                Vector2d twoV2 = new Vector2d(two.getPos().getX(), two.getPos().getY());
+                Vector2d threeV2 = new Vector2d(three.getPos().getX(), three.getPos().getY());
+
+
+
+                dda(oneV2,temv,g2d,one.getColor(),tempVer.getColor());
+
+//                dda(twoV2,threeV2,g2d,two.getColor(),three.getColor());
+
+//                dda(threeV2,oneV2,g2d,three.getColor(),one.getColor());
+//                downTriangle(one, tempVer, two, g2d);
+//                topTriangle(tempVer, two, three, g2d);
+
+            }
+
+        }
+    }
+
+    private void topTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
+        //three 底
+        if(one.getPos().getY()- three.getPos().getY()<0.00001f){
+            Vertex temp = two;
+            two = three;
+            three = temp;
+        }else if(two.getPos().getY() - three.getPos().getY() < 0.00001f){
+            Vertex temp = three;
+            three = one;
+            one = temp;
+        }else if(one.getPos().getY() - two.getPos().getY() < 0.00001f){
+
+        }else{
+            return;
+        }
+        if(one.getPos().getX() > two.getPos().getX()){
+            Vertex temp = two;
+            two = one;
+            one = temp;
+        }
+
+        double x1 = one.getPos().getX();
+        double x2 = two.getPos().getX();
+        double x3 = three.getPos().getX();
+        double y1 = one.getPos().getY();
+        double y2 = two.getPos().getY();
+        double y3 = three.getPos().getY();
+        Color c1 = one.getColor();
+        Color c2 = two.getColor();
+        Color c3 = three.getColor();
+
+        double xleft = (x3-x1)/(y3-y1);
+        double xright = (x2-x3)/(y2-y3);
+        double red_l = ((c3.getRed() - c1.getRed())/(y3-y1));
+        double red_r = ((c2.getRed() - c3.getRed())/(y2-y3));
+        double blue_l = ((c3.getBlue() - c1.getBlue())/(y3-y1));
+        double blue_r = ((c2.getBlue() - c3.getBlue())/(y2-y3));
+        double green_l = ((c3.getGreen() - c1.getGreen())/(y3-y1));
+        double green_r = ((c2.getGreen() - c3.getGreen())/(y2-y3));
+
+        double xs = x1;
+        double xe = x3;
+        double rs = c1.getRed();
+        double re = c1.getRed();
+        double gs = c1.getGreen();
+        double ge = c2.getGreen();
+        double bs = c2.getBlue();
+        double be = c2.getBlue();
+
+        for(double y = y1; y < y3; y++){
+
+            double s= (y - y1)/(y3 - y1);
+            double z1 = one.getZ_deep();
+            double z2 = two.getZ_deep();
+            double z3 = three.getZ_deep();
+            double zt = 0;
+            double k = 0;
+            if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
+            if(zt != 0) zt = 1/zt;
+            if(z1 != z3) k = (zt - z1)/(z3 - z1);
+
+            double zl = zt;
+            double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
+            double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
+
+            if(z3 != 0 && z2 != 0) zt = 1/z2 + s * (1/z3 - 1/ z2);
+            if(zt != 0) zt = 1/zt;
+            if(z3 != z2) k = (zt - z2)/(z3 - z2);
+
+            double zr = zt;
+            double ur = two.getTexture().getU() + k * (three.getTexture().getU()  - two.getTexture().getU());
+            double vr = two.getTexture().getV() + k * (three.getTexture().getV()  - two.getTexture().getV());
+
+            line(xs,xe,y,rs,gs,bs,re,ge,be,zl,zr,ul,ur,vl,vr,g2d);
+
+            xs += xleft;
+            xe += xright;
+            rs += red_l;
+            re += red_r;
+            gs += green_l;
+            ge += green_r;
+            bs += blue_l;
+            be += blue_r;
+        }
+
+    }
+
+    //平底三角形
+    private void downTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
+        //one 顶
+        if(Math.abs(three.getPos().getY()- one.getPos().getY())<0.00001f){
+            Vertex temp = two;
+            two = one;
+            one = temp;
+        }else if(Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f){
+            Vertex temp = three;
+            three = one;
+            one = temp;
+        }else if(Math.abs(three.getPos().getY() - two.getPos().getY()) < 0.00001f){
+
+        }else{
+            return;
+        }
+        if(three.getPos().getX() > two.getPos().getX()){
+            Vertex temp = two;
+            two = three;
+            three = temp;
+        }
+
+        double x1 = one.getPos().getX();
+        double x2 = two.getPos().getX();
+        double x3 = three.getPos().getX();
+        double y1 = one.getPos().getY();
+        double y2 = two.getPos().getY();
+        double y3 = three.getPos().getY();
+        Color c1 = one.getColor();
+        Color c2 = two.getColor();
+        Color c3 = three.getColor();
+
+        double xleft = (x3-x1)/(y3-y1);
+        double xright = (x2-x1)/(y2-y1);
+        double red_l = ((c3.getRed() - c1.getRed())/(y3-y1));
+        double red_r = ((c2.getRed() - c2.getRed())/(y2-y1));
+        double blue_l = ((c3.getBlue() - c1.getBlue())/(y3-y1));
+        double blue_r = ((c2.getBlue() - c2.getBlue())/(y2-y1));
+        double green_l = ((c3.getGreen() - c1.getGreen())/(y3-y1));
+        double green_r = ((c2.getGreen() - c2.getGreen())/(y2-y1));
+
+        double xs = x1;
+        double xe = x1;
+        double rs = c1.getRed();
+        double re = c1.getRed();
+        double gs = c1.getGreen();
+        double ge = c1.getGreen();
+        double bs = c1.getBlue();
+        double be = c1.getBlue();
+
+        for(double y = y1; y < y2; y++){
+
+            double s= (y - y1)/(y3 - y1);
+            double z1 = one.getZ_deep();
+            double z2 = two.getZ_deep();
+            double z3 = three.getZ_deep();
+            double zt = 0;
+            double k = 0;
+            if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
+            if(zt != 0) zt = 1/zt;
+            if(z1 != z3) k = (zt - z1)/(z3 - z1);
+
+            double zl = zt;
+            double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
+            double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
+
+            if(z1 != 0 && z2 != 0) zt = 1/z1 + s * (1/z2 - 1/ z1);
+            if(zt != 0) zt = 1/zt;
+            if(z1 != z2) k = (zt - z1)/(z2 - z1);
+
+            double zr = zt;
+            double ur = one.getTexture().getU() + k * (two.getTexture().getU()  - one.getTexture().getU());
+            double vr = one.getTexture().getV() + k * (two.getTexture().getV()  - one.getTexture().getV());
+
+            line(xs,xe,y,rs,gs,bs,re,ge,be,zl,zr,ul,ur,vl,vr,g2d);
+
+            xs += xleft;
+            xe += xright;
+            rs += red_l;
+            re += red_r;
+            gs += green_l;
+            ge += green_r;
+            bs += blue_l;
+            be += blue_r;
+        }
+
+    }
+
+    private void line(double xs, double xe, double y, double rs, double gs, double bs, double re, double ge, double be, double zl, double zr, double ul, double ur, double vl, double vr, Graphics2D g2d) {
+        double deltaR = 0.0;
+        double deltaG = 0.0;
+        double deltaB = 0.0;
+
+        if(Math.abs(xe - xs) > 0.0001f){
+            deltaR = (re - rs) * 1.0 / (xe - xs);
+            deltaG = (ge - gs) * 1.0 / (xe - xs);
+            deltaB = (be - bs) * 1.0 / (xe - xs);
+        }
+        int textheight = Scene.getInstance().getTexture().getHeight();
+        int textwidth = Scene.getInstance().getTexture().getWidth();
+
+        for(double x = xs;x < xe;x++){
+            double fac_x = (x - xs)/(xe - xs);
+            double new_z = 0.0;
+            double fac_t = 0.0;
+            if(zl != 0.0 && zr != 0.0) new_z = 1/zl + fac_x * (1/zr - 1/ zl);
+            if(new_z != 0) new_z = 1 / new_z;
+            if(zl != zr) fac_t = (new_z - zl)/(zr - zl);
+            double u = ul + fac_t * (ur - ul);
+            double v = vl + fac_t * (vr - vl);
+
+            v = (v > 1.0) ? 1.0 : Math.max(v, 0.0);
+            u = (u > 1.0) ? 1.0 : Math.max(u, 0.0);
+
+            System.out.println(u + " " + v);
+            int c = 0;
+            try {
+                c = Scene.getInstance().getTexture().getRGB((int) (textwidth * u), (int) (textheight * v));
+            }catch (Exception e){
+                System.out.println(e);
+            }
+
+            int red = (int)   (rs * (c>>16 & 0x0000ff) / 255) ;
+            int green = (int)  (gs * (c>>8  & 0x0000ff) / 255);
+            int blue = (int)   (bs * (c     & 0x0000ff) / 255);
+
+            red  = red < 0? 0 : Math.min(red, 255);
+            blue  = blue < 0? 0 : Math.min(blue, 255);
+            green  = green < 0? 0 : Math.min(green, 255);
+
+//            System.out.println(red + " " + blue + " " + green);
+            Color color = new Color(red,green,blue);
+
+            g2d.setColor(color);
+            g2d.drawLine((int) x, (int) y, (int) x, (int) y);
+            rs += deltaR;
+            bs += deltaB;
+            gs += deltaG;
+        }
+    }
+
+    public void dda(Vector2d v1, Vector2d v2, Graphics2D g, Color c1, Color c2){
+
+        double increx, increy, x, y, length;
+        length = Math.max(Math.abs(v2.getX()-v1.getX()),Math.abs(v2.getY()-v1.getY()));
+        increx = ((v2.getX()- v1.getX())/length);
+        increy = ((v2.getY() - v1.getY())/length);
+        x = v1.getX();
+        y = v1.getY();
+        double dis = Math.sqrt(Math.pow(v2.getX() - v1.getX(),2) + Math.pow(v2.getY()-v1.getY(),2));
+        int red, green, blue;
+        for (int i = 0; i < length ;i++){
+
+            double t = Math.sqrt(Math.pow(x - v1.getX(),2) + Math.pow(y-v1.getY(),2))/dis;
+            if(c1.getRed() > c2.getRed()) {
+                red = (int) (c1.getRed() - t * (Math.abs(c1.getRed() - c2.getRed())));
+            }else{
+                red = (int) (c1.getRed() + t * (Math.abs(c1.getRed() - c2.getRed())));
+            }
+
+            if(c1.getBlue() > c2.getBlue()) {
+                blue = (int) (c1.getBlue() - t * (Math.abs(c1.getBlue() - c2.getBlue())));
+            }else{
+                blue = (int) (c1.getBlue() + t * (Math.abs(c1.getBlue() - c2.getBlue())));
+            }
+
+            if(c1.getGreen() > c2.getGreen()) {
+                green = (int) (c1.getGreen() - t * (Math.abs(c1.getGreen() - c2.getGreen())));
+            }else{
+                green = (int) (c1.getGreen() + t * (Math.abs(c1.getGreen() - c2.getGreen())));
+            }
+
+            g.setColor(new Color(red,blue,green));
+
+            g.drawLine((int) ((int) x+0.5), (int) ((int)y+0.5), (int) ((int) x+0.5), (int) ((int)y+0.5));
+            x += increx;
+            y += increy;
+        }
+    }
 
 
     public void addtri(Triangle t){
@@ -26,10 +390,5 @@ public class Obj {
         this.worldmatrix = wpos;
     }
 
-    public void draw() {
-        for (int i = 0; i < ltri.size(); i++) {
-            ltri.get(i).draw(worldmatrix);
-        }
 
-    }
 }

@@ -15,9 +15,10 @@ public class Vertex {
     private Material material;
     private TextureCoord texture;
     private Color color;
+    private double z_deep;
 
     public Vector4d getPos() {
-        return pos;
+        return this.pos;
     }
 
     public void setPos(Vector4d pos) {
@@ -56,7 +57,7 @@ public class Vertex {
         this.z_deep = z_deep;
     }
 
-    private double z_deep;
+
 
     public Vertex() {
         pos = new Vector4d(0.0,0.0,0.0,1);
