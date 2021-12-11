@@ -85,8 +85,8 @@ public class Matrix {
     public Matrix rotateX(double deg){
         Matrix m = new Matrix();
         m.ele[5] = Math.cos(deg * pi180);
-        m.ele[6] = -Math.sin(deg * pi180);
-        m.ele[9] = Math.sin(deg * pi180);
+        m.ele[6] = Math.sin(deg * pi180);
+        m.ele[9] = -Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -94,8 +94,8 @@ public class Matrix {
     public Matrix rotateY(double deg){
         Matrix m = new Matrix();
         m.ele[0] = Math.cos(deg * pi180);
-        m.ele[2] = Math.sin(deg * pi180);
-        m.ele[8] = -Math.sin(deg * pi180);
+        m.ele[2] = -Math.sin(deg * pi180);
+        m.ele[8] = Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -103,8 +103,8 @@ public class Matrix {
     public Matrix rotateZ(double deg){
         Matrix m = new Matrix();
         m.ele[0] = Math.cos(deg * pi180);
-        m.ele[1] = -Math.sin(deg * pi180);
-        m.ele[4] = Math.sin(deg * pi180);
+        m.ele[1] = Math.sin(deg * pi180);
+        m.ele[4] = -Math.sin(deg * pi180);
         m.ele[5] = Math.cos(deg * pi180);
         return m;
     }
@@ -176,11 +176,11 @@ public class Matrix {
     //投影变换
     public Matrix projectTransform(double fovY, double aspect, double zNear, double zFar){
         Matrix temp = new Matrix().zero();
-        temp.set(0,1/(Math.tan(fovY * pi180) * aspect));
-        temp.set(5,1/(Math.tan(fovY * pi180)));
-        temp.set(10,zFar/zFar - zNear);
-        temp.set(11,1.0);
-        temp.set(14,(zNear * zFar)/(zNear- zFar));
+        temp.ele[0] = 1/(Math.tan(fovY * pi180) * aspect);
+        temp.ele[5] = 1/ Math.tan(fovY * pi180);
+        temp.ele[10] = zFar/(zFar - zNear);
+        temp.ele[11] = 1.0f;
+        temp.ele[14] = (zNear * zFar)/(zNear- zFar);
         return temp;
     }
 

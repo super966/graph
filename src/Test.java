@@ -1,9 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author LSY
@@ -55,18 +52,7 @@ public class Test {
 
     public static void main(String[] args){
         File img = new File("C:\\Users\\Administrator\\IdeaProjects\\graph\\src\\robot.bmp");
-        try {
-            BufferedImage bi = ImageIO.read(img);
-            int width = bi.getWidth();
-            int height = bi.getHeight();
-            int rgb = bi.getRGB(100, 100);
-            int blue = rgb&0x000000ff;
-            int green = rgb>>8&0x000000ff;
-            int red = rgb>>16&0x000000ff;
-            System.out.println(red +" " + green + " " + blue);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(Math.sin(30*(3.1415926/180)));
 
 
     }

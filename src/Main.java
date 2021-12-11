@@ -13,8 +13,8 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Vertex v1 = new Vertex(new Vector4d(1,0,0,1));
-        Vertex v2 = new Vertex(new Vector4d(0,1,0,1));
+        Vertex v1 = new Vertex(new Vector4d(3,0,0,1));
+        Vertex v2 = new Vertex(new Vector4d(0,3,0,1));
         Vertex v3 = new Vertex(new Vector4d(0,0,0,1));
         v1.setNormal(new Vector4d(0,0,-1,0));
         v2.setNormal(new Vector4d(0,0,-1,0));
@@ -23,22 +23,22 @@ public class Main {
         v2.setMaterial(new Material(0.2,0.4,0.6,2));
         v3.setMaterial(new Material(0.2,0.4,0.6,2));
 
-        v1.setColor(Color.red);
-        v2.setColor(Color.blue);
-        v3.setColor(Color.green);
-        Vertex v4 = new Vertex(new Vector4d(0,1,0,1));
-        Vertex v5 = new Vertex(new Vector4d(1,0,0,1));
-        Vertex v6 = new Vertex(new Vector4d(0,0,1,1));
+//        v1.setColor(Color.red);
+//        v2.setColor(Color.blue);
+//        v3.setColor(Color.green);
+        Vertex v4 = new Vertex(new Vector4d(0,3,0,1));
+        Vertex v5 = new Vertex(new Vector4d(3,0,0,1));
+        Vertex v6 = new Vertex(new Vector4d(0,0,3,1));
         v4.setNormal(new Vector4d(1,1,1,0).Normalize());
         v5.setNormal(new Vector4d(1,1,1,0).Normalize());
         v6.setNormal(new Vector4d(1,1,1,0).Normalize());
         v4.setMaterial(new Material(0.2,0.4,0.6,2));
         v5.setMaterial(new Material(0.2,0.4,0.6,2));
         v6.setMaterial(new Material(0.2,0.4,0.6,2));
-        v1.setTexture(new TextureCoord(0,1));
-        v2.setTexture(new TextureCoord(1,0));
-        v3.setTexture(new TextureCoord(0,0));
-        v4.setTexture(new TextureCoord(0,1));
+        v1.setTexture(new TextureCoord(0,0));
+        v2.setTexture(new TextureCoord(0, 1));
+        v3.setTexture(new TextureCoord(1,1));
+        v4.setTexture(new TextureCoord(1,1));
         v5.setTexture(new TextureCoord(1,0));
         v6.setTexture(new TextureCoord(0,0));
 
@@ -50,15 +50,15 @@ public class Main {
         points[1] = v2;
         points[2] = v3;
         Obj obj = new Obj();
-//        obj.addtri(
-//                new Triangle(points)
-//        );
-        points[0] = v4;
-        points[1] = v5;
-        points[2] = v6;
         obj.addtri(
                 new Triangle(points)
         );
+        points[0] = v4;
+        points[1] = v5;
+        points[2] = v6;
+//        obj.addtri(
+//                new Triangle(points)
+//        );
 
         Vector4d campos = new Vector4d(0,0,-2,1);
         Vector4d camright = new Vector4d(1,0,0,1);
@@ -74,7 +74,7 @@ public class Main {
         Vector4d objPos = new Vector4d(1,0,0,1);
         Vector4d scale = new Vector4d(1,1,1,1);
         double xdeg = 0;
-        double ydeg = 90;
+        double ydeg = 0;
         double zdeg = 0;
 
         Matrix worldMatrix = new Matrix().worldTransform(objPos,scale,xdeg,ydeg,zdeg);
@@ -100,7 +100,9 @@ public class Main {
 
         frame.setVisible(true);
         scene.setBackground(frame);
-        scene.draw();
+
+            scene.draw();
+
 
 
 

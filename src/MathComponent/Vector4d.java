@@ -127,4 +127,9 @@ public class Vector4d {
     }
 
     final double pi180 = 3.1415926 / 180;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

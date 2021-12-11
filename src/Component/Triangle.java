@@ -55,7 +55,6 @@ public class Triangle extends JPanel {
 
 
     public Vertex[] draw(Matrix worldMatrix) {
-        JFrame frame = Scene.getInstance().getBackground();
         Scene scene = Scene.getInstance();
         Camera camera = scene.getCamera();
         Matrix viewTransMatrix = camera.getViewTransform();
@@ -72,7 +71,9 @@ public class Triangle extends JPanel {
         for (int i = 0; i < temp.length; i++) {
             temp[i] = point[i];
             temp[i].matrixMul(worldMatrix);
+//            temp[i].setColor((temp[i]).getColor());
             temp[i].setColor(lightModel(temp[i]));
+//
             temp[i].matrixMul(viewTransMatrix);
             temp[i].setZ_deep(temp[i].getPos().getZ());
             temp[i].matrixMul(projTransMatrix);

@@ -28,4 +28,9 @@ public class TextureCoord {
         this.u = u;
         this.v = v;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

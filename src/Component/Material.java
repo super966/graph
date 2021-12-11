@@ -48,4 +48,9 @@ public class Material {
     public void setKs(double ks) {
         this.ks = ks;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
