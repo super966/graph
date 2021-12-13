@@ -58,7 +58,7 @@ public class Vector4d {
     }
 
     public Vector4d minus(Vector4d v){
-        return new Vector4d(v.x - x, v.y - y, v.z - z,v.w - w);
+        return new Vector4d(x - v.x, y -  v.y, z - v.z,w - v.x);
     }
 
     public Vector4d  revserse(){
@@ -106,6 +106,14 @@ public class Vector4d {
                             x*m.get(3) + y * m.get(7) + z * m.get(11) + w * m.get(15));
     }
 
+    public Vector4d mul(double f){
+        return new Vector4d(
+        x *= f,
+        y *= f,
+        z *= f,
+        w *= f);
+    }
+
     public void degToRadian(){
         x *= pi180;
         y *= pi180;
@@ -131,5 +139,15 @@ public class Vector4d {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Vector4d{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", w=" + w +
+                '}';
     }
 }

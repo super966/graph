@@ -170,7 +170,7 @@ public class Matrix {
         Matrix sc = new Matrix().scale(scale);
         Matrix tr = new Matrix().trans(pos);
 
-        return zm.mul(ym).mul(xm).mul(sc).mul(tr);
+        return tr.mul(sc).mul(xm).mul(ym).mul(zm);
     }
 
     //投影变换

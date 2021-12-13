@@ -104,6 +104,13 @@ public class Camera {
         projTransform = new Matrix().projectTransform(fovY, aspect, zNear, zFar);
     }
 
+    @Override
+    public String toString() {
+        return "Camera{" +
+                "pos=" + pos +
+                '}';
+    }
+
 //    public void lr()
 
 

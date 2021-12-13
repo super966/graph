@@ -14,6 +14,15 @@ public class Scene {
     private static volatile Scene scene;
     private Camera camera;
     private ViewPoint viewPoint;
+
+    public List<Obj> getObj() {
+        return obj;
+    }
+
+    public void setObj(List<Obj> obj) {
+        this.obj = obj;
+    }
+
     private List<Obj> obj = new ArrayList<>();
     private AmbtLight ambtLight;
     private PointLight pointLight;
@@ -86,8 +95,6 @@ public class Scene {
     }
 
     public void draw(){
-        for (int i = 0; i < this.obj.size(); i++) {
-            background.getContentPane().add(obj.get(i));
-        }
+
     }
 }

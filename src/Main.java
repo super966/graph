@@ -60,7 +60,7 @@ public class Main {
 //                new Triangle(points)
 //        );
 
-        Vector4d campos = new Vector4d(0,0,-2,1);
+        Vector4d campos = new Vector4d(-2,0,-2,1);
         Vector4d camright = new Vector4d(1,0,0,1);
         Vector4d camup = new Vector4d(0,1,0,1);
 
@@ -75,7 +75,7 @@ public class Main {
         Vector4d scale = new Vector4d(1,1,1,1);
         double xdeg = 0;
         double ydeg = 0;
-        double zdeg = 90;
+        double zdeg = 0;
 
         Matrix worldMatrix = new Matrix().worldTransform(objPos,scale,xdeg,ydeg,zdeg);
         obj.setWorldmatrix(worldMatrix);
@@ -93,18 +93,20 @@ public class Main {
 
         JFrame frame = new JFrame("Scene");
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 800);
-
+        frame.setLayout(null);
         frame.setLocationRelativeTo(null);
-
+        obj.setBounds(0, 0, 1000, 800);
         frame.setVisible(true);
-        scene.setBackground(frame);
-
-            scene.draw();
+        obj.setBackground(Color.black);
 
 
+//        for (int i = 0; i < Scene.getInstance().getObj().size(); i++) {
+        frame.addKeyListener(obj);
+        frame.add(obj);
 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
+
 }

@@ -128,14 +128,4 @@ public class Vertex implements Cloneable {
         pos.divW();
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        Vertex v = (Vertex) super.clone();
-        v.pos = (Vector4d) this.pos.clone();
-        v.normal = (Vector4d) this.normal.clone();
-        v.material = (Material) this.material.clone();
-        v.texture = (TextureCoord) this.texture.clone();
-        v.z_deep = this.z_deep;
-        return v;
-    }
 }

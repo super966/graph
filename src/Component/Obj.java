@@ -7,6 +7,8 @@ import MathComponent.Vertex;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * @author LSY
  * @date 2021/12/09 13:05
  **/
-public class Obj extends JPanel {
+public class Obj extends JPanel implements KeyListener {
 
     private List<Triangle> ltri = new ArrayList<>();
     private Matrix worldmatrix;
@@ -25,8 +27,14 @@ public class Obj extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        for (int i = 0; i < ltri.size(); i++) {
-            Vertex[] temp = ltri.get(i).draw(worldmatrix);
+
+//        for (int i = 0; i < ltri.size(); i++) {
+
+            Camera c = Scene.getInstance().getCamera();
+            System.out.println(c);
+            Triangle t = new Triangle(ltri.get(0));
+            Vertex[] temp = t.draw(worldmatrix,c);
+
             Vertex one = temp[0];
             Vertex two = temp[1];
             Vertex three = temp[2];
@@ -76,6 +84,8 @@ public class Obj extends JPanel {
 //
 //                dda(oneV2,threeV2,g2d,one.getColor(),three.getColor());
                 topTriangle(one, two, three, g2d);
+//                ltri.remove(i);
+//                ltri.add(t);
             }else if(Math.abs(two.getPos().getY()-three.getPos().getY()) < 0.00001f){
                 downTriangle(one, two, three, g2d);
             }else{
@@ -137,8 +147,8 @@ public class Obj extends JPanel {
                 topTriangle(tempVer, two, three, g2d);
 
             }
+        repaint();
 
-        }
     }
 
     private void downTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
@@ -201,7 +211,7 @@ public class Obj extends JPanel {
             double z2 = two.getZ_deep();
             double z3 = three.getZ_deep();
             double zt = 0;
-            double k = 0;
+            double k = s;
             if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
             if(zt != 0) zt = 1/zt;
             if(z1 != z3) k = (zt - z1)/(z3 - z1);
@@ -210,6 +220,7 @@ public class Obj extends JPanel {
             double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
             double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
 
+            k = s;
             if(z3 != 0 && z2 != 0) zt = 1/z2 + s * (1/z3 - 1/ z2);
             if(zt != 0) zt = 1/zt;
             if(z3 != z2) k = (zt - z2)/(z3 - z2);
@@ -281,21 +292,21 @@ public class Obj extends JPanel {
 
         double xleft = (x3-x1)/(y3-y1);
         double xright = (x3-x2)/(y3-y2);
-//        double red_l = ((c3.getRed() - c1.getRed())/(y3-y1));
-//        double red_r = ((c3.getRed() - c2.getRed())/(y3-y2));
-//        double blue_l = ((c3.getBlue() - c1.getBlue())/(y3-y1));
-//        double blue_r = ((c3.getBlue() - c2.getBlue())/(y3-y2));
-//        double green_l = ((c3.getGreen() - c1.getGreen())/(y3-y1));
-//        double green_r = ((c3.getGreen() - c2.getGreen())/(y3-y2));
+        double red_l = ((c3.getRed() - c1.getRed())/(y3-y1));
+        double red_r = ((c3.getRed() - c2.getRed())/(y3-y2));
+        double blue_l = ((c3.getBlue() - c1.getBlue())/(y3-y1));
+        double blue_r = ((c3.getBlue() - c2.getBlue())/(y3-y2));
+        double green_l = ((c3.getGreen() - c1.getGreen())/(y3-y1));
+        double green_r = ((c3.getGreen() - c2.getGreen())/(y3-y2));
 
         double xs = x1;
         double xe = x2;
-//        double rs = c1.getRed();
-//        double re = c2.getRed();
-//        double gs = c1.getGreen();
-//        double ge = c2.getGreen();
-//        double bs = c1.getBlue();
-//        double be = c2.getBlue();
+        double rs = c1.getRed();
+        double re = c2.getRed();
+        double gs = c1.getGreen();
+        double ge = c2.getGreen();
+        double bs = c1.getBlue();
+        double be = c2.getBlue();
 
         for(double y = y1; y < y3; y++){
 
@@ -327,14 +338,13 @@ public class Obj extends JPanel {
 
             xs += xleft;
             xe += xright;
-//            rs += red_l;
-//            re += red_r;
-//            gs += green_l;
-//            ge += green_r;
-//            bs += blue_l;
-//            be += blue_r;
+            rs += red_l;
+            re += red_r;
+            gs += green_l;
+            ge += green_r;
+            bs += blue_l;
+            be += blue_r;
         }
-
     }
 
     private void line(double xs, double xe, double y, double zl, double zr, double ul, double ur, double vl, double vr, Graphics2D g2d) {
@@ -349,8 +359,8 @@ public class Obj extends JPanel {
 //        }
         int textheight = Scene.getInstance().getTexture().getHeight();
         int textwidth = Scene.getInstance().getTexture().getWidth();
-
-        for(double x = xs;x < xe;x++){
+        double x = 0;
+        for( x = xs;x < xe;x++){
             double fac_x = (x - xs)/(xe - xs);
             double new_z = 0.0;
             double fac_t = fac_x;
@@ -366,7 +376,7 @@ public class Obj extends JPanel {
             v = (v > 1.0) ? 1.0 : Math.max(v, 0.0);
             u = (u > 1.0) ? 1.0 : Math.max(u, 0.0);
 
-            System.out.println(u + " " + v);
+            ;
             int c = 0;
             try {
                 c = Scene.getInstance().getTexture().getRGB((int) ((textwidth-1) * u), (int) ((textheight - 1) * v));
@@ -441,5 +451,79 @@ public class Obj extends JPanel {
         this.worldmatrix = wpos;
     }
 
+    public Vector4d moveLeft(double step) {
+        Vector4d pos = Scene.getInstance().getCamera().getPos();
+        Vector4d n_right = new Vector4d(Scene.getInstance().getCamera().getRight());
+        pos = pos.add(n_right.mul(step));
+        return pos;
+    }
 
+    public Vector4d moveRight(double step) {
+        Vector4d pos = Scene.getInstance().getCamera().getPos();
+        Vector4d n_right = new Vector4d(Scene.getInstance().getCamera().getRight());
+
+        pos = pos.minus(n_right.mul(step));
+        return pos;
+    }
+
+    public Vector4d moveUp(double step) {
+        Vector4d pos = Scene.getInstance().getCamera().getPos();
+        Vector4d n_up = new Vector4d(Scene.getInstance().getCamera().getUp());
+        pos = pos.add(n_up.mul(step));
+        return pos;
+    }
+
+    public Vector4d moveDown(double step) {
+        Vector4d pos = Scene.getInstance().getCamera().getPos();
+        Vector4d n_up = new Vector4d(Scene.getInstance().getCamera().getUp());
+        pos = pos.minus(n_up.mul(step));
+        return pos;
+    }
+
+    public Vector4d forword(double step){
+        Vector4d pos = Scene.getInstance().getCamera().getPos();
+        Vector4d n_up = new Vector4d(Scene.getInstance().getCamera().getUp());
+        Vector4d n_right = new Vector4d(Scene.getInstance().getCamera().getRight());
+        pos = pos.add(n_right.crossMul(n_up).mul(step));
+        return pos;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        Vector4d pos = null;
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            pos = moveRight(1);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_D) {
+            pos = moveLeft(1);
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_W) {
+            pos = moveUp(1);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_S) {
+            pos = moveDown(1);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_Q) {
+            pos = forword(1);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_E) {
+            pos = forword(-1);
+        }
+        Vector4d n_up = new Vector4d(Scene.getInstance().getCamera().getUp());
+        Vector4d n_right = new Vector4d(Scene.getInstance().getCamera().getRight());
+        Matrix n_viewTransform = new Matrix().viewTrans(pos,n_up,n_right);
+        Scene.getInstance().getCamera().setPos(pos);
+        Scene.getInstance().getCamera().setViewTransform(n_viewTransform);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }

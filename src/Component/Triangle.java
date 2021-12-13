@@ -4,16 +4,21 @@ import MathComponent.Matrix;
 import MathComponent.Vector4d;
 import MathComponent.Vertex;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class Triangle extends JPanel {
+public class Triangle{
     private Vertex[] point = new Vertex[3];
 
 
     public Triangle(Vertex[] v) {
         for (int i = 0; i < v.length; i++) {
             point[i] = v[i];
+        }
+    }
+
+    public Triangle(Triangle t){
+        for (int i = 0; i < t.point.length; i++) {
+            point[i] = new Vertex(t.point[i]);
         }
     }
 
@@ -54,9 +59,9 @@ public class Triangle extends JPanel {
 
 
 
-    public Vertex[] draw(Matrix worldMatrix) {
+    public Vertex[] draw(Matrix worldMatrix, Camera c) {
         Scene scene = Scene.getInstance();
-        Camera camera = scene.getCamera();
+        Camera camera = c;
         Matrix viewTransMatrix = camera.getViewTransform();
         Matrix projTransMatrix = camera.getProjTransform();
         ViewPoint viewPoint = scene.getViewPoint();

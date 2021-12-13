@@ -1,59 +1,82 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * @author LSY
  * @date 2021/12/09 16:01
  **/
-public class Test {
-    public static class MyDrawPanel extends JPanel {
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.setColor(Color.orange);
-            g.fillRect(20, 50, 100, 100);
-        }
+public class Test extends JPanel implements KeyListener {
+
+    int x=40,y=40;
+    Test(){
+        JFrame frame = new JFrame();
+        frame.setSize( 800, 600);
+        frame.setLayout(null);
+        this.setBounds(0, 0, 800, 700);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        this.setBackground(Color.GREEN);
+        frame.addKeyListener(this);
+        frame.add(this);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
-    public static class MyDrawPanel2 extends JPanel {
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.setColor(Color.red);
-            g.fillRect(50, 50, 100, 100);
-        }
-    }
-
-
-    public static class MyDrawPanel3 extends JPanel {
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.setColor(Color.black);
-            g.fillRect(150, 150, 100, 100);
-        }
+    public static void main(String[] args) {
+        new Test();
     }
 
-    public static class Scene extends JPanel{
-        JFrame frame;
-        public Scene(JFrame frame){
-            this.frame = frame;
-        }
-
-        public void draw(JPanel jPanel){
-//            MyDrawPanel panel = new MyDrawPanel();
-//            JLabel label = new JLabel("aaa");
-//            panel.setBackground(Color.blue);
-//            panel.add(label);
-            frame.getContentPane().add(jPanel);
-        }
+    public void moveleft(){
+        this.x--;
     }
 
-    public static void main(String[] args){
-        File img = new File("C:\\Users\\Administrator\\IdeaProjects\\graph\\src\\robot.bmp");
-        System.out.println(Math.sin(30*(3.1415926/180)));
+    public void moveright(){
+        this.x++;
+    }
 
+    public void moveup(){
+        this.y--;
+    }
+    public void movedown(){
+        this.y++;
+    }
+
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.red);
+        g2d.fillOval(x, y, 20, 20);
+        repaint();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_A){
+            x++;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_D){
+           x--;
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_W){
+            y++;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_S){
+            y--;
+        }
+        System.out.println(x + " " + y);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }
