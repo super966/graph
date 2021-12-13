@@ -35,9 +35,9 @@ public class Main {
         v4.setMaterial(new Material(0.2,0.4,0.6,2));
         v5.setMaterial(new Material(0.2,0.4,0.6,2));
         v6.setMaterial(new Material(0.2,0.4,0.6,2));
-        v1.setTexture(new TextureCoord(0,0));
-        v2.setTexture(new TextureCoord(0, 1));
-        v3.setTexture(new TextureCoord(1,1));
+        v1.setTexture(new TextureCoord(0,1));
+        v2.setTexture(new TextureCoord(1, 0));
+        v3.setTexture(new TextureCoord(0,0));
         v4.setTexture(new TextureCoord(1,1));
         v5.setTexture(new TextureCoord(1,0));
         v6.setTexture(new TextureCoord(0,0));
@@ -75,7 +75,7 @@ public class Main {
         Vector4d scale = new Vector4d(1,1,1,1);
         double xdeg = 0;
         double ydeg = 0;
-        double zdeg = 0;
+        double zdeg = 90;
 
         Matrix worldMatrix = new Matrix().worldTransform(objPos,scale,xdeg,ydeg,zdeg);
         obj.setWorldmatrix(worldMatrix);

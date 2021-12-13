@@ -304,7 +304,7 @@ public class Obj extends JPanel {
             double z2 = two.getZ_deep();
             double z3 = three.getZ_deep();
             double zt = 0;
-            double k = 0;
+            double k = s;
             if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
             if(zt != 0) zt = 1/zt;
             if(z1 != z3) k = (zt - z1)/(z3 - z1);
@@ -313,6 +313,7 @@ public class Obj extends JPanel {
             double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
             double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
 
+            k = s;
             if(z3 != 0 && z2 != 0) zt = 1/z2 + s * (1/z3 - 1/ z2);
             if(zt != 0) zt = 1/zt;
             if(z3 != z2) k = (zt - z2)/(z3 - z2);
@@ -352,7 +353,7 @@ public class Obj extends JPanel {
         for(double x = xs;x < xe;x++){
             double fac_x = (x - xs)/(xe - xs);
             double new_z = 0.0;
-            double fac_t = 0.0;
+            double fac_t = fac_x;
             if(zl != 0.0 && zr != 0.0) new_z = 1/zl + fac_x * (1/zr - 1/ zl);
             if(new_z != 0) new_z = 1 / new_z;
             if(zl != zr) fac_t = (new_z - zl)/(zr - zl);
