@@ -73,6 +73,7 @@ public class Camera {
     }
 
     public Matrix getViewTransform() {
+        viewTransform = new Matrix().projectTransform(fovY,aspect,zNear,zFar);
         return viewTransform;
     }
 

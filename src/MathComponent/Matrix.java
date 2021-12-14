@@ -8,7 +8,7 @@ package MathComponent;
 
 
 public class Matrix {
-    private double[] ele = {1.0, 0.0, 0.0, 0.0,
+    public double[] ele = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
                             0.0, 0.0, 0.0, 1.0};
@@ -85,8 +85,8 @@ public class Matrix {
     public Matrix rotateX(double deg){
         Matrix m = new Matrix();
         m.ele[5] = Math.cos(deg * pi180);
-        m.ele[6] = Math.sin(deg * pi180);
-        m.ele[9] = -Math.sin(deg * pi180);
+        m.ele[6] = -Math.sin(deg * pi180);
+        m.ele[9] = Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -94,8 +94,8 @@ public class Matrix {
     public Matrix rotateY(double deg){
         Matrix m = new Matrix();
         m.ele[0] = Math.cos(deg * pi180);
-        m.ele[2] = -Math.sin(deg * pi180);
-        m.ele[8] = Math.sin(deg * pi180);
+        m.ele[2] = Math.sin(deg * pi180);
+        m.ele[8] = -Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -188,7 +188,7 @@ public class Matrix {
     public Matrix viewPointTransform(double x, double y, double width, double height, double minz, double maxz){
         Matrix temp = new Matrix();
         temp.ele[0] = width / 2;
-        temp.ele[5] = height / 2;
+        temp.ele[5] = -height / 2;
         temp.ele[10] = maxz - minz;
         temp.ele[12] = x + width / 2;
         temp.ele[13] = y + height / 2;
