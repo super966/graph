@@ -33,10 +33,10 @@ public class Obj extends JPanel implements KeyListener {
             Camera c = Scene.getInstance().getCamera();
             System.out.println(c);
             Triangle t = new Triangle(ltri.get(i));
-            Matrix rotateX = new Matrix().rotateX(0.01);
-            Matrix rotateY = new Matrix().rotateY(0.02);
-            worldmatrix  = worldmatrix.mul(rotateX);
-            worldmatrix = worldmatrix.mul(rotateY);
+//            Matrix rotateX = new Matrix().rotateX(0.01);
+//            Matrix rotateY = new Matrix().rotateY(0.02);
+//            worldmatrix  = worldmatrix.mul(rotateX);
+//            worldmatrix = worldmatrix.mul(rotateY);
             Vertex[] temp = t.draw(worldmatrix, c);
 
             Vertex one = temp[0];
@@ -53,17 +53,17 @@ public class Obj extends JPanel implements KeyListener {
             if ((x1 == x2 && x1 == x3) || (y1 == y2 && y1 == y3))
                 return;
 
-            if (y1 > y2) {
+            if (one.getPos().getY() > two.getPos().getY()) {
                 Vertex swap = two;
                 two = one;
                 one = swap;
             }
-            if (y1 > y3) {
+            if (one.getPos().getY() > three.getPos().getY()) {
                 Vertex swap = three;
                 three = one;
                 one = swap;
             }
-            if (y2 > y3) {
+            if (two.getPos().getY() > three.getPos().getY()) {
                 Vertex swap = two;
                 two = three;
                 three = swap;
@@ -75,8 +75,7 @@ public class Obj extends JPanel implements KeyListener {
             x3 = (int) three.getPos().getX();
             y3 = (int) three.getPos().getY();
 
-            if (Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f) {
-//                Vector2d oneV2 = new Vector2d(one.getPos().getX(), one.getPos().getY());
+//            Vector2d oneV2 = new Vector2d(one.getPos().getX(), one.getPos().getY());
 //                Vector2d twoV2 = new Vector2d(two.getPos().getX(), two.getPos().getY());
 //                Vector2d threeV2 = new Vector2d(three.getPos().getX(), three.getPos().getY());
 //
@@ -87,12 +86,14 @@ public class Obj extends JPanel implements KeyListener {
 //                dda(twoV2,threeV2,g2d,two.getColor(),three.getColor());
 //
 //                dda(oneV2,threeV2,g2d,one.getColor(),three.getColor());
-                topTriangle(one, two, three, g2d);
-//                ltri.remove(i);
-//                ltri.add(t);
-            } else if (Math.abs(two.getPos().getY() - three.getPos().getY()) < 0.00001f) {
+
+            if (Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f) {
                 downTriangle(one, two, three, g2d);
-            } else {
+            } else if (Math.abs(two.getPos().getY() - three.getPos().getY()) < 0.00001f) {
+//
+                topTriangle(one, two, three, g2d);
+            } else
+            {
                 int tempVer_x = (int) (x1 + 0.5 + 1.0 * (y2 - y1) * (x3 - x1) / (y3 - y1));
                 int tempVer_r = (int) (one.getColor().getRed() + 1.0 * (y2 - y1) *
                         (three.getColor().getRed() - one.getColor().getRed()) / (y3 - y1));
@@ -135,18 +136,6 @@ public class Obj extends JPanel implements KeyListener {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-//                Vector2d temv = new Vector2d(tempVer.getPos().getX(),tempVer.getPos().getY());
-//                Vector2d oneV2 = new Vector2d(one.getPos().getX(), one.getPos().getY());
-//                Vector2d twoV2 = new Vector2d(two.getPos().getX(), two.getPos().getY());
-//                Vector2d threeV2 = new Vector2d(three.getPos().getX(), three.getPos().getY());
-//
-
-
-//                dda(oneV2,temv,g2d,one.getColor(),tempVer.getColor());
-//                dda(oneV2,twoV2,g2d,one.getColor(),tempVer.getColor());
-//                dda(twoV2,threeV2,g2d,two.getColor(),three.getColor());
-//
-//                dda(threeV2,oneV2,g2d,three.getColor(),one.getColor());
                 downTriangle(one, tempVer, two, g2d);
                 topTriangle(tempVer, two, three, g2d);
 
@@ -156,25 +145,25 @@ public class Obj extends JPanel implements KeyListener {
         }
     }
 
-    private void downTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
-        //three 底
-        if(Math.abs(one.getPos().getY()- three.getPos().getY())<0.00001f){
+    private void topTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
+        //one 底
+//        if(Math.abs(one.getPos().getY()- three.getPos().getY())<0.00001f){
+//            Vertex temp = two;
+//            two = three;
+//            three = temp;
+//        }else if(Math.abs(two.getPos().getY() - three.getPos().getY()) < 0.00001f){
+//            Vertex temp = three;
+//            three = one;
+//            one = temp;
+//        }else if(Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f){
+//
+//        }else{
+//            return;
+//        }
+        if(three.getPos().getX() > two.getPos().getX()){
             Vertex temp = two;
             two = three;
             three = temp;
-        }else if(Math.abs(two.getPos().getY() - three.getPos().getY()) < 0.00001f){
-            Vertex temp = three;
-            three = one;
-            one = temp;
-        }else if(Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f){
-
-        }else{
-            return;
-        }
-        if(one.getPos().getX() > two.getPos().getX()){
-            Vertex temp = two;
-            two = one;
-            one = temp;
         }else if(Math.abs(two.getPos().getX() - one.getPos().getX()) < 0.0001f){
             return;
         }
@@ -192,48 +181,48 @@ public class Obj extends JPanel implements KeyListener {
         Color c3 = getColor(Scene.getInstance().getTexture().getRGB((int) three.getTexture().getU() * (width-1),(int) three.getTexture().getV()*(height-1)));
 
 
-        double xleft = (x1-x3)/(y1-y3);
-        double xright = (x2-x3)/(y2-y3);
-        double red_l = ((c1.getRed() - c3.getRed())/(y1-y3));
-        double red_r = ((c2.getRed() - c3.getRed())/(y2-y3));
-        double blue_l = ((c1.getBlue() - c3.getBlue())/(y1-y3));
-        double blue_r = ((c2.getBlue() - c3.getBlue())/(y2-y3));
-        double green_l = ((c1.getGreen() - c3.getGreen())/(y1-y3));
-        double green_r = ((c2.getGreen() - c3.getGreen())/(y2-y3));
+        double xleft = (x3-x1)/(y3-y1);
+        double xright = (x2-x1)/(y2-y1);
+        double red_l = ((c3.getRed() - c1.getRed())/(y3-y1));
+        double red_r = ((c2.getRed() - c1.getRed())/(y2-y1));
+        double blue_l = ((c3.getBlue() - c1.getBlue())/(y3-y1));
+        double blue_r = ((c2.getBlue() - c1.getBlue())/(y2-y1));
+        double green_l = ((c3.getGreen() - c1.getGreen())/(y3-y1));
+        double green_r = ((c2.getGreen() - c1.getGreen())/(y2-y1));
 
-        double xs = x3;
-        double xe = x3;
-        double rs = c3.getRed();
-        double re = c3.getRed();
-        double gs = c3.getGreen();
-        double ge = c3.getGreen();
-        double bs = c3.getBlue();
-        double be = c3.getBlue();
+        double xs = x1;
+        double xe = x1;
+        double rs = c1.getRed();
+        double re = c1.getRed();
+        double gs = c1.getGreen();
+        double ge = c1.getGreen();
+        double bs = c1.getBlue();
+        double be = c1.getBlue();
 
-        for(double y = y3; y < y1; y++){
+        for(double y = y1; y < y3; y++){
 
-            double s= (y - y3)/(y1 - y3);
+            double s= (y - y1)/(y3 - y1);
             double z1 = one.getZ_deep();
             double z2 = two.getZ_deep();
             double z3 = three.getZ_deep();
             double zt = 0;
             double k = s;
-            if(z1 != 0 && z3 != 0) zt = 1/z3 + s * (1/z1 - 1/ z3);
+            if(z1 != 0 && z3 != 0) zt = 1/z1 + s * (1/z3 - 1/ z1);
             if(zt != 0) zt = 1/zt;
-            if(z1 != z3) k = (zt - z3)/(z1 - z3);
+            if(z1 != z3) k = (zt - z1)/(z3 - z1);
 
             double zl = zt;
-            double ul = three.getTexture().getU() + k * (one.getTexture().getU()  - three.getTexture().getU());
-            double vl = three.getTexture().getV() + k * (one.getTexture().getV()  - three.getTexture().getV());
+            double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
+            double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
 
              k = s;
-            if(z3 != 0 && z2 != 0) zt = 1/z3 + s * (1/z2 - 1/ z3);
+            if(z1 != 0 && z2 != 0) zt = 1/z1 + s * (1/z2 - 1/ z1);
             if(zt != 0) zt = 1/zt;
-            if(z3 != z2) k = (zt - z3)/(z2 - z3);
+            if(z1 != z2) k = (zt - z1)/(z2 - z1);
 
             double zr = zt;
-            double ur = three.getTexture().getU() + k * (two.getTexture().getU()  - three.getTexture().getU());
-            double vr = three.getTexture().getV() + k * (two.getTexture().getV()  - three.getTexture().getV());
+            double ur = one.getTexture().getU() + k * (two.getTexture().getU()  - one.getTexture().getU());
+            double vr = one.getTexture().getV() + k * (two.getTexture().getV()  - one.getTexture().getV());
 
             line(xs,xe,y,zl,zr,ul,ur,vl,vr,g2d);
 
@@ -259,30 +248,26 @@ public class Obj extends JPanel implements KeyListener {
     }
 
     //平底三角形
-    private void topTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
-        //one 顶
-        if(Math.abs(three.getPos().getY()- one.getPos().getY())<0.00001f){
+    private void downTriangle(Vertex one, Vertex two, Vertex three, Graphics2D g2d) {
+        //three 顶
+//        if(Math.abs(three.getPos().getY()- one.getPos().getY())<0.00001f){
+//            Vertex temp = two;
+//            two = one;
+//            one = temp;
+//        }else if(Math.abs(three.getPos().getY() - two.getPos().getY()) < 0.00001f){
+//            Vertex temp = three;
+//            three = one;
+//            one = temp;
+//        }else if(Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f){
+//
+//        }else{
+//            return;
+//        }
+        if(one.getPos().getX() > two.getPos().getX()){
             Vertex temp = two;
             two = one;
             one = temp;
-        }else if(Math.abs(one.getPos().getY() - two.getPos().getY()) < 0.00001f){
-            Vertex temp = three;
-            three = one;
-            one = temp;
-        }else if(Math.abs(three.getPos().getY() - two.getPos().getY()) < 0.00001f){
-
-        }else{
-            return;
         }
-        if(three.getPos().getX() > two.getPos().getX()){
-            Vertex temp = two;
-            two = three;
-            three = temp;
-        }
-
-        Vertex temp = one;
-        one = three;
-        three = temp;
 
         double x1 = one.getPos().getX();
         double x2 = two.getPos().getX();
