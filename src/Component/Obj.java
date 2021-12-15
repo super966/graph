@@ -33,10 +33,10 @@ public class Obj extends JPanel implements KeyListener {
             Camera c = Scene.getInstance().getCamera();
             System.out.println(c);
             Triangle t = new Triangle(ltri.get(i));
-//            Matrix rotateX = new Matrix().rotateX(0.01);
-//            Matrix rotateY = new Matrix().rotateY(0.02);
-//            worldmatrix  = worldmatrix.mul(rotateX);
-//            worldmatrix = worldmatrix.mul(rotateY);
+            Matrix rotateX = new Matrix().rotateX(0.01);
+            Matrix rotateY = new Matrix().rotateY(0.02);
+            worldmatrix  = worldmatrix.mul(rotateX);
+            worldmatrix = worldmatrix.mul(rotateY);
             Vertex[] temp = t.draw(worldmatrix, c);
 
             Vertex one = temp[0];
@@ -94,13 +94,14 @@ public class Obj extends JPanel implements KeyListener {
                 topTriangle(one, two, three, g2d);
             } else
             {
-                int tempVer_x = (int) (x1 + 0.5 + 1.0 * (y2 - y1) * (x3 - x1) / (y3 - y1));
-                int tempVer_r = (int) (one.getColor().getRed() + 1.0 * (y2 - y1) *
-                        (three.getColor().getRed() - one.getColor().getRed()) / (y3 - y1));
-                int tempVer_g = (int) (one.getColor().getGreen() + 1.0 * (y2 - y1) *
-                        (three.getColor().getGreen() - one.getColor().getGreen()) / (y3 - y1));
-                int tempVer_b = (int) (one.getColor().getBlue() + 1.0 * (y2 - y1) *
-                        (three.getColor().getBlue() - one.getColor().getBlue()) / (y3 - y1));
+                int tempVer_x = (int) (one.getPos().getX() + 0.5 + 1.0 * (two.getPos().getY() - one.getPos().getY()) *
+                        (three.getPos().getX() - one.getPos().getX()) / (three.getPos().getY() - one.getPos().getY()));
+                int tempVer_r = (int) (one.getColor().getRed() + 1.0 * (two.getPos().getY() - one.getPos().getY()) *
+                        (three.getColor().getRed() - one.getColor().getRed()) / (three.getPos().getY() - one.getPos().getY()));
+                int tempVer_g = (int) (one.getColor().getGreen() + 1.0 * (two.getPos().getY() - one.getPos().getY()) *
+                        (three.getColor().getGreen() - one.getColor().getGreen()) / (three.getPos().getY() - one.getPos().getY()));
+                int tempVer_b = (int) (one.getColor().getBlue() + 1.0 * (two.getPos().getY() - one.getPos().getY()) *
+                        (three.getColor().getBlue() - one.getColor().getBlue()) / (three.getPos().getY() - one.getPos().getY()));
 
                 tempVer_r = tempVer_r < 0 ? 0 : Math.min(tempVer_r, 255);
                 tempVer_b = tempVer_b < 0 ? 0 : Math.min(tempVer_b, 255);
@@ -108,22 +109,22 @@ public class Obj extends JPanel implements KeyListener {
 
                 Color tempVer_c = new Color(tempVer_r, tempVer_g, tempVer_b);
                 Vertex tempVer = new Vertex();
-                tempVer.setTexture(one.getTexture());
-                tempVer.setNormal(one.getNormal());
-                tempVer.setMaterial(one.getMaterial());
+                tempVer.setTexture(new TextureCoord(two.getTexture().getU(),two.getTexture().getV()));
+                tempVer.setNormal(new Vector4d(two.getNormal()));
+                tempVer.setMaterial(new Material(two.getMaterial().getKa(),two.getMaterial().getKd(),two.getMaterial().getKs(),two.getMaterial().getN()));
                 tempVer.setPos(new Vector4d(0, 0, 0, 0));
-                tempVer.setZ_deep(one.getZ_deep());
+                tempVer.setZ_deep(two.getZ_deep());
                 tempVer.getPos().setX(tempVer_x);
-                tempVer.getPos().setY(one.getPos().getY());
-                tempVer.getPos().setZ(one.getPos().getZ());
-                tempVer.getPos().setW(one.getPos().getW());
+                tempVer.getPos().setY(two.getPos().getY());
+                tempVer.getPos().setZ(two.getPos().getZ());
+                tempVer.getPos().setW(two.getPos().getW());
                 tempVer.setColor(tempVer_c);
 
-                double s = (y2 - y1) / (y3 - y2);
+                double s = (two.getPos().getY() - one.getPos().getY()) / (three.getPos().getY() - one.getPos().getY());
                 double z1 = one.getZ_deep();
                 double z3 = three.getZ_deep();
                 double zt = 0;
-                double k = 0;
+                double k = s;
                 if (z1 != 0 && z3 != 0) zt = 1 / z1 + s * (1 / z3 - 1 / z1);
                 if (zt != 0) zt = 1 / zt;
                 if (z1 != z3) k = (zt - z1) / (z3 - z1);
@@ -136,8 +137,8 @@ public class Obj extends JPanel implements KeyListener {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-                downTriangle(one, tempVer, two, g2d);
-                topTriangle(tempVer, two, three, g2d);
+                topTriangle(one, tempVer, two, g2d);
+                downTriangle(tempVer, two, three, g2d);
 
             }
             repaint();
@@ -215,7 +216,7 @@ public class Obj extends JPanel implements KeyListener {
             double ul = one.getTexture().getU() + k * (three.getTexture().getU()  - one.getTexture().getU());
             double vl = one.getTexture().getV() + k * (three.getTexture().getV()  - one.getTexture().getV());
 
-             k = s;
+            k = s;
             if(z1 != 0 && z2 != 0) zt = 1/z1 + s * (1/z2 - 1/ z1);
             if(zt != 0) zt = 1/zt;
             if(z1 != z2) k = (zt - z1)/(z2 - z1);

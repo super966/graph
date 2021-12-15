@@ -14,8 +14,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Vertex v1 = new Vertex(new Vector4d(3,0,0,1));
-        Vertex v2 = new Vertex(new Vector4d(0,3,0,1));
-        Vertex v3 = new Vertex(new Vector4d(0,0,0,1));
+        Vertex v2 = new Vertex(new Vector4d(0,6,0,1));
+        Vertex v3 = new Vertex(new Vector4d(0,3,0,1));
         Vertex v4 = new Vertex(new Vector4d(3,3,0,1));
         v1.setNormal(new Vector4d(0,0,-1,0));
         v2.setNormal(new Vector4d(0,0,-1,0));
@@ -44,11 +44,11 @@ public class Main {
                 new Triangle(points)
         );
         points[2] = v4;
-        obj.addtri(
-                new Triangle(points)
-        );
+//        obj.addtri(
+//                new Triangle(points)
+//        );
 
-        Vector4d campos = new Vector4d(0,0,-2,1);
+        Vector4d campos = new Vector4d(-2,0,-2,1);
         Vector4d camright = new Vector4d(1,0,0,1);
         Vector4d camup = new Vector4d(0,1,0,1);
 
