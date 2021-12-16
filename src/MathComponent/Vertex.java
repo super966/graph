@@ -16,6 +16,17 @@ public class Vertex implements Cloneable {
     private TextureCoord texture;
     private Color color;
     private double z_deep;
+    private byte bpos = 0;
+
+    public byte getBpos() {
+        return bpos;
+    }
+
+    public void setBpos(byte bpos) {
+        this.bpos = bpos;
+    }
+
+
 
     public Vector4d getPos() {
         return this.pos;
@@ -127,5 +138,7 @@ public class Vertex implements Cloneable {
     public void divideW(){
         pos.divW();
     }
+
+
 
 }

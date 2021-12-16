@@ -61,7 +61,7 @@ public class Vector4d {
         return new Vector4d(x - v.x, y -  v.y, z - v.z,w - v.x);
     }
 
-    public Vector4d  revserse(){
+    public Vector4d reverse(){
         x = -x;
         y = -y;
         z = -z;
@@ -127,11 +127,11 @@ public class Vector4d {
 
     public Vector4d Normalize(){
         double length = Length();
-        return new Vector4d(
-            x /= length,
-            y /= length,
-            z /= length, w
-        );
+
+            x /= length;
+            y /= length;
+            z /= length;
+        return this;
     }
 
     final double pi180 = 3.1415926 / 180;

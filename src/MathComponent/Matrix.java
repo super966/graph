@@ -70,12 +70,12 @@ public class Matrix {
                 ele[3] * m.ele[4] + ele[7] * m.ele[5] + ele[11] * m.ele[6] + ele[15] *  m.ele[7],
 
                 ele[0] * m.ele[8] + ele[4] * m.ele[9] + ele[8]  * m.ele[10] + ele[12] *  m.ele[11],
-                ele[1] * m.ele[8] + ele[5] * m.ele[9] + ele[9] *  m.ele[10] + ele[13] *  m.ele[11],
+                ele[1] * m.ele[8] + ele[5] * m.ele[9] + ele[9]  * m.ele[10] + ele[13] *  m.ele[11],
                 ele[2] * m.ele[8] + ele[6] * m.ele[9] + ele[10] * m.ele[10] + ele[14] *  m.ele[11],
                 ele[3] * m.ele[8] + ele[7] * m.ele[9] + ele[11] * m.ele[10] + ele[15] *  m.ele[11],
 
                 ele[0] * m.ele[12] + ele[4] * m.ele[13] + ele[8]  * m.ele[14] + ele[12] * m.ele[15],
-                ele[1] * m.ele[12] + ele[5] * m.ele[13] + ele[9] *  m.ele[14] + ele[13] * m.ele[15],
+                ele[1] * m.ele[12] + ele[5] * m.ele[13] + ele[9]  * m.ele[14] + ele[13] * m.ele[15],
                 ele[2] * m.ele[12] + ele[6] * m.ele[13] + ele[10] * m.ele[14] + ele[14] * m.ele[15],
                 ele[3] * m.ele[12] + ele[7] * m.ele[13] + ele[11] * m.ele[14] + ele[15] * m.ele[15]
         };
@@ -85,8 +85,8 @@ public class Matrix {
     public Matrix rotateX(double deg){
         Matrix m = new Matrix();
         m.ele[5] = Math.cos(deg * pi180);
-        m.ele[6] = -Math.sin(deg * pi180);
-        m.ele[9] = Math.sin(deg * pi180);
+        m.ele[6] = Math.sin(deg * pi180);
+        m.ele[9] = -Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -94,8 +94,8 @@ public class Matrix {
     public Matrix rotateY(double deg){
         Matrix m = new Matrix();
         m.ele[0] = Math.cos(deg * pi180);
-        m.ele[2] = Math.sin(deg * pi180);
-        m.ele[8] = -Math.sin(deg * pi180);
+        m.ele[2] = -Math.sin(deg * pi180);
+        m.ele[8] = Math.sin(deg * pi180);
         m.ele[10] = Math.cos(deg * pi180);
         return m;
     }
@@ -170,7 +170,7 @@ public class Matrix {
         Matrix sc = new Matrix().scale(scale);
         Matrix tr = new Matrix().trans(pos);
 
-        return tr.mul(sc).mul(xm).mul(ym).mul(zm);
+        return new Matrix(xm.mul(ym).mul(zm).mul(sc).mul(tr));
     }
 
     //投影变换
